@@ -3,9 +3,12 @@ package com.devsuperior.dsCatagog.services;
 import com.devsuperior.dsCatagog.dto.CategoryDTO;
 import com.devsuperior.dsCatagog.entities.Category;
 import com.devsuperior.dsCatagog.repositories.CategoryRepository;
+import com.devsuperior.dsCatagog.services.exceptions.DatabaseException;
 import com.devsuperior.dsCatagog.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,5 +53,15 @@ public class CategoryService {
            throw new ResourceNotFoundException("id not found" + id);
         }
     }
-}
+
+    public void delete(Long id) {
+       try{
+       repository.deleteById(id);
+    }
+       catch (EmptyResultDataAccessException e){
+           throw new ResourceNotFoundException("Id not found"+ id);
+       }catch (DataIntegrityViolationException e ){
+         throw new DatabaseException("Violação de integridade");
+       }
+}}
 
