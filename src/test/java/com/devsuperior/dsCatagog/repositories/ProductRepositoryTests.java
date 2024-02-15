@@ -17,10 +17,13 @@ import java.util.Optional;
 
         private long exintingId;
         private long countTotalProducts;
+        private long notExintingId;
         @BeforeEach
         void setUp()throws Exception{
             exintingId=1L;
             countTotalProducts=25L;
+            notExintingId=29L;
+
         }
 
         @Test
@@ -39,4 +42,17 @@ import java.util.Optional;
             Assertions.assertNotNull(product.getId());
             Assertions.assertEquals(countTotalProducts+1, product.getId());
         }
+
+        @Test
+        public void findByIdShouldReturnNonEmptyOptionalWhenIdExists(){
+         Optional<Product> result= productRepository.findById(exintingId);
+         Assertions.assertTrue(result.isPresent());
+        }
+
+        @Test
+        public void findByIdShoulReturnEmptyOptionalWhenIdDoesNotExists(){
+            Optional<Product> result= productRepository.findById(notExintingId);
+            Assertions.assertTrue(result.isEmpty());
+        }
+
 }
