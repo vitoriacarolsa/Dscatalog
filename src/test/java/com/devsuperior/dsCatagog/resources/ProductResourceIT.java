@@ -1,5 +1,8 @@
 package com.devsuperior.dsCatagog.resources;
 
+import com.devsuperior.dsCatagog.dto.ProductDTO;
+import com.devsuperior.dsCatagog.tests.Factory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductResourceIT {
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
     private Long existingId;
     private Long nonExistingId;
     private Long countTotalProducts;
@@ -42,4 +48,40 @@ public class ProductResourceIT {
         result.andExpect(jsonPath("$.content[1].name").value("PC Gamer"));
         result.andExpect(jsonPath("$.content[2].name").value("PC Gamer Alfa"));
     }
+
+    @Test
+    public void updateShouldReturnProductDTOWhenIdExists() throws Exception{
+        ProductDTO productDTO= Factory.createProductDTO();
+        String expectedName = productDTO.getName();
+        String expectedDescription= productDTO.getDescription();
+
+        String jsonBody= objectMapper.writeValueAsString(productDTO);
+
+        ResultActions result=
+                mockMvc.perform(put("/products/{id}", existingId)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isOk());
+        result.andExpect(jsonPath("$.id").exists());
+        result.andExpect(jsonPath("$.name").value(expectedName));
+        result.andExpect(jsonPath("$.description").value(expectedDescription));
+    }
+
+    @Test
+    public void updateShouldReturnNotFoundWhenIdDoesNotExists() throws Exception{
+        ProductDTO productDTO= Factory.createProductDTO();
+
+        String jsonBody= objectMapper.writeValueAsString(productDTO);
+
+        ResultActions result=
+                mockMvc.perform(put("/products/{id}", nonExistingId)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNotFound());}
+
+
 }
