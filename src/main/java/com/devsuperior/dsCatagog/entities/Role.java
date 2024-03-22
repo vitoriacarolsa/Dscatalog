@@ -11,13 +11,15 @@ public class Role {
     private Long id;
     private String authority;
 
-    private Role(){
-    }
-
     public Role(Long id, String authority) {
         this.id = id;
         this.authority = authority;
     }
+
+    public Role() {
+
+    }
+
     public Long getId() {
         return id;
     }
