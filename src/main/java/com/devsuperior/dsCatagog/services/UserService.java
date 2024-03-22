@@ -3,6 +3,7 @@ package com.devsuperior.dsCatagog.services;
 import com.devsuperior.dsCatagog.dto.CategoryDTO;
 import com.devsuperior.dsCatagog.dto.RoleDTO;
 import com.devsuperior.dsCatagog.dto.UserDTO;
+import com.devsuperior.dsCatagog.dto.UserInsertDTO;
 import com.devsuperior.dsCatagog.entities.Category;
 import com.devsuperior.dsCatagog.entities.Role;
 import com.devsuperior.dsCatagog.entities.User;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,9 @@ public class UserService {
 
    @Autowired
    private RoleRepository roleRepository;
+
+   @Autowired
+   private BCryptPasswordEncoder passwordEncoder;
 
    @Transactional(readOnly= true)
     public Page<UserDTO> findAllPaged(Pageable pageable)  {
@@ -42,9 +47,10 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO insert(UserDTO dto) {
+    public UserDTO insert(UserInsertDTO dto) {
        User entity = new User();
        copyDtoToEntity(dto, entity);
+       entity.setPassword(passwordEncoder.encode(dto.getPassword()));
        entity= userRepository.save(entity);
        return new UserDTO(entity);
     }
