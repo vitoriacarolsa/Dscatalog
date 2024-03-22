@@ -1,8 +1,13 @@
 package com.devsuperior.dsCatagog.entities;
 
-import java.util.Objects;
+import jakarta.persistence.*;
 
+import java.util.Objects;
+@Entity
+@Table(name = "tb_role")
 public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String authority;
 
@@ -13,7 +18,6 @@ public class Role {
         this.id = id;
         this.authority = authority;
     }
-
     public Long getId() {
         return id;
     }
