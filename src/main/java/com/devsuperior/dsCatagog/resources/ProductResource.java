@@ -1,9 +1,11 @@
 package com.devsuperior.dsCatagog.resources;
 
 import com.devsuperior.dsCatagog.dto.ProductDTO;
+import com.devsuperior.dsCatagog.projections.ProductProjection;
 import com.devsuperior.dsCatagog.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +23,11 @@ public class ProductResource {
     @Autowired
     private ProductService service;
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){
-
-        Page<ProductDTO>list= service.findAllPaged(pageable);
+    public ResponseEntity<Page<ProductProjection>> findAll(
+           @RequestParam (value= "name", defaultValue = "") String name,
+           @RequestParam (value = "categoryId", defaultValue = "0") String categoryId,
+            Pageable pageable){
+        Page<ProductProjection>list= service.findAllPaged(name, categoryId, pageable);
         return ResponseEntity.ok().body(list);
   }
 
