@@ -1,7 +1,7 @@
 package com.devsuperior.dsCatagog.services;
 
-import com.devsuperior.demo.dto.EmailDTO;
-import com.devsuperior.demo.services.exceptions.EmailException;
+import com.devsuperior.dsCatagog.dto.EmailDTO;
+import com.devsuperior.dsCatagog.services.exceptions.EmailException;
 import com.devsuperior.dsCatagog.services.exceptions.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
