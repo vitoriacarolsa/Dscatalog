@@ -1,9 +1,6 @@
 package com.devsuperior.dsCatagog.resources;
 
-import com.devsuperior.dsCatagog.dto.EmailDTO;
-import com.devsuperior.dsCatagog.dto.UserDTO;
-import com.devsuperior.dsCatagog.dto.UserInsertDTO;
-import com.devsuperior.dsCatagog.dto.UserUpdateDTO;
+import com.devsuperior.dsCatagog.dto.*;
 import com.devsuperior.dsCatagog.services.AuthService;
 import com.devsuperior.dsCatagog.services.UserService;
 import jakarta.validation.Valid;
@@ -30,5 +27,12 @@ public class AuthResource {
         authService.createRecoverToken(body);
         return ResponseEntity.noContent().build();
   }
+
+    @PutMapping(value = "/new-password")
+    public ResponseEntity<Void> saveNewPassword(@Valid @RequestBody NewPasswordDTO body){
+
+        authService.saveNewPassword(body);
+        return ResponseEntity.noContent().build();
+    }
 }
 
